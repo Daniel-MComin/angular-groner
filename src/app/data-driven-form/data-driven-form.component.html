@@ -1,0 +1,205 @@
+<form class="form-horizontal" [formGroup]="formulario" (ngSubmit)="onSubmit()">
+  <div class="col-12 mb-3">
+    <label for="nome" class="form-label">Nome</label>
+    <input
+     type="text" 
+     class="form-control" 
+     id="nome" 
+     formControlName="nome"
+     [ngClass]="aplicarErro('nome')">
+
+     <app-campo-control 
+    [mostrarErro]="verificarValid('nome')"
+     msgErro="Nome é obrigatório">
+    </app-campo-control>
+
+  </div>
+
+
+  <div class="col-12 mb-3">
+    <label for="email" class="form-label">E-mail</label>
+    <input 
+    type="email" 
+    class="form-control" 
+    id="email" 
+    formControlName="email" 
+    [ngClass]="aplicarErro('email')">
+
+    <app-campo-control 
+    [mostrarErro]="verificarValid('email')"
+     msgErro="E-mail é obrigatório">
+    </app-campo-control>
+
+    <app-campo-control 
+    [mostrarErro]="verificarEmail()"
+     msgErro="E-mail inválido">
+    </app-campo-control>
+
+  </div>
+
+  <div class="col-12 mb-3">
+    <label for="confirmarEmail" class="form-label">Confirmar E-mail</label>
+    <input 
+    type="email" 
+    class="form-control" 
+    id="confirmarEmail" 
+    formControlName="confirmarEmail" 
+    [ngClass]="aplicarErro('confirmarEmail')">
+
+    <app-campo-control 
+    [mostrarErro]="!!formulario.get('confirmarEmail')?.hasError('equalsTo')"
+     msgErro="Confirmar e-mail é obrigatório!">
+    </app-campo-control>
+
+    <app-campo-control 
+    [mostrarErro]="verificarEmail()"
+     msgErro="E-mail inválido!">
+    </app-campo-control>
+  </div>
+
+  <div>
+    <div class="row g-3 mb-3">
+  
+      <div class="col-md-3">
+        <label for="cep" class="form-label">CEP</label>
+        <input 
+        type="text" 
+        name="cep" 
+        class="form-control"
+        [ngClass]="aplicarErro('cep')"
+        formControlName="cep"
+        (blur)="consultaCep()">
+  
+        <app-campo-control 
+        [mostrarErro]="verificarValid('cep')" 
+        msgErro="CEP é obrigatório"></app-campo-control>
+
+        <app-campo-control 
+        [mostrarErro]="verificarCepInvalido()"
+        msgErro="CEP inválido"></app-campo-control>
+      </div>
+  
+      <div class="col-md-3">
+        <label for="number" class="form-label">Número</label>
+        <input type="number" 
+        name="number" 
+        class="form-control"
+        [ngClass]="aplicarErro('number')"
+        formControlName="number">
+  
+        <app-campo-control 
+        [mostrarErro]="verificarValid('number')" 
+        msgErro="Número é obrigatório"></app-campo-control>
+      </div>
+  
+      <div class="col-md-6">
+        <label for="complemento" class="form-label">Complemento</label>
+        <input 
+        type="text" 
+        name="complemento" 
+        class="form-control"
+        formControlName="complemento">
+      </div>
+  
+    </div>
+  
+    <div class=" col-12 mb-3">
+      <label for="rua" class="form-label">Rua</label>
+      <input  
+      type="rua" 
+      class="form-control"
+      id="rua" 
+      name="rua"
+      [ngClass]="aplicarErro('rua')"
+      formControlName="rua">
+    <app-campo-control 
+      [mostrarErro]="verificarValid('rua')" 
+      msgErro="Rua é obrigatório">
+    </app-campo-control>
+    </div>
+  
+  
+    <div class="row g-3 mb-3">
+  
+      <div class="col-md-5">
+        <label for="bairro" class="form-label">Bairro</label>
+        <input type="text"
+        name="bairro"
+        class="form-control"
+        [ngClass]="aplicarErro('bairro')"
+        formControlName="bairro">
+  
+        <app-campo-control 
+        [mostrarErro]="verificarValid('bairro')" 
+        msgErro="Bairro é obrigatório"></app-campo-control>
+      </div>
+  
+      <div class="col-md-4">
+        <label for="cidade" class="form-label">Cidade</label>
+        <input 
+        type="text" 
+        name="cidade" 
+        class="form-control"
+        [ngClass]="aplicarErro('cidade')"
+        formControlName="cidade">
+  
+        <app-campo-control 
+        [mostrarErro]="verificarValid('cidade')" 
+        msgErro="Cidade é obrigatório"></app-campo-control>
+      </div>
+  
+      <div class="col-md-3">
+        <label for="estado" class="form-label">Estado</label>
+        <select type="text" formControlName="estado" class="form-control" [ngClass]="aplicarErro('estado')">
+          <option *ngFor=" let estado of estados | async"  [value]="estado.sigla"> {{ estado.nome }}</option>
+        </select>
+  
+        <app-campo-control 
+        [mostrarErro]="verificarValid('estado')" 
+        msgErro="Estado é obrigatório"></app-campo-control>
+  
+      </div>
+
+      <div class="col-md-3">
+        <label for="tecnologias" class="form-label">Tecnologias</label>
+        <select multiple  formControlName="tecnologias" class="form-control">
+        <option *ngFor="let tecnologia of tecnologias"  [value]="tecnologia.nome"> {{ tecnologia.descri }}</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 mt-3 mb-3">
+      <div class="checkbox" [ngClass]="aplicarErro('termos')">
+        <label class="checkbox-inline">
+          <input type="checkbox" formControlName="termos"> Aceito os termos.
+        </label>
+        <app-campo-control 
+        [mostrarErro]="!this.formulario.controls['termos'].valid" 
+        msgErro="Por favor aceite os termos!"></app-campo-control>
+      </div>
+      </div>
+    </div>
+
+    <div class="form-group mt-3 mb-3">
+      <label for="frameworks" class="">Frameworks</label>
+      <div class="row " id="frameworks">
+        <div class="checkbox" class="col-sm-6" formArrayName="frameworks" *ngFor="let item of getFrameworksControls(); let i = index">
+          <label class="checkbox-inline mt-1 mb-1">
+            <input type="checkbox" [formControlName]="i" > {{ frameworks[i] }}
+          </label>
+        </div>
+        <app-campo-control 
+        [mostrarErro]="!this.formulario.controls['frameworks'].valid" 
+        msgErro="Selecione pelo menos uma opção!"></app-campo-control>
+        </div>
+      </div>
+  
+
+  <button type="submit" class="btn btn-primary" >Submit</button>
+  <button class="btn btn-secondary" (click)="onReset()">Cancelar</button>
+  <button class="btn btn-secondary" (click)="setarCursos()">Tecnologias</button>
+
+  <app-form-debug [form]="formulario"></app-form-debug>
+</form>
